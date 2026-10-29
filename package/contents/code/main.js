@@ -9,15 +9,13 @@
  * after that it is left alone until it is reopened or the re-apply shortcut
  * is pressed.
  *
- * The layout is read from kwinrc, group [Script-xplane-popup-manager],
- * key "Layout" (JSON), written by save-layout.py, merged over DEFAULT_LAYOUT.
+ * Config lives in kwinrc, group [Script-xplane-popup-manager]:
+ *   Layout    JSON {"shared": {title: rect}, "aircraft": {acf_path: {title: rect}}},
+ *             written by save-layout.py
+ *   Aircraft  relative path of the loaded .acf, written by watcher.py
+ * The active layout is the shared one overlaid with the current aircraft's.
+ * The script is reloaded whenever either key changes.
  */
-
-const DEFAULT_LAYOUT = {
-    "LEFT PDU":  { x: 230,  y: 2188, width: 1566, height: 1045 },
-    "UPPER MDU": { x: 1920, y: 2188, width: 1549, height: 1046 },
-    "LOWER MDU": { x: 3840, y: 1163, width: 1427, height: 907 },
-};
 
 // Upper bound on corrections per window appearance, in case the aircraft keeps
 // fighting back (or KWin's aspect-ratio constraint makes the target unreachable).
@@ -31,22 +29,19 @@ function log(msg) {
     print("xplane-popup-manager: " + msg);
 }
 
-// Saved entries override the defaults; a null entry removes one.
 function loadLayout() {
-    const merged = Object.assign({}, DEFAULT_LAYOUT);
+    const aircraft = readConfig("Aircraft", "").toString();
     const raw = readConfig("Layout", "").toString();
+    let saved = {};
     if (raw !== "") {
         try {
-            Object.assign(merged, JSON.parse(raw));
+            saved = JSON.parse(raw);
         } catch (e) {
-            log("invalid Layout in kwinrc, using defaults: " + e);
+            log("invalid Layout in kwinrc: " + e);
         }
     }
-    for (const title of Object.keys(merged)) {
-        if (!merged[title])
-            delete merged[title];
-    }
-    return merged;
+    const perAircraft = (saved.aircraft || {})[aircraft] || {};
+    return Object.assign({}, saved.shared || {}, perAircraft);
 }
 
 function isXPlaneWindow(window) {
@@ -141,4 +136,4 @@ registerShortcut("XPlanePopupManagerReapply", "X-Plane Popup Manager: Re-apply L
     });
 });
 
-log("loaded, managing: " + Object.keys(layout).join(", "));
+log("loaded for '" + readConfig("Aircraft", "").toString() + "', managing: " + Object.keys(layout).join(", "));

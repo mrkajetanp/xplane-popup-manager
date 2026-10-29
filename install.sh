@@ -16,4 +16,4 @@ qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript "$id" >/dev/n
 qdbus6 org.kde.KWin /KWin reconfigure
 qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.start
 
-printf 'loaded: %s\n' "$(qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.isScriptLoaded "$id")"
+printf 'KWin script loaded: %s\n' "$(qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.isScriptLoaded "$id")"
