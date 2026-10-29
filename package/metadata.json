@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "kajetan.puchalski@tuta.io",
+                "Name": "Kajetan Puchalski"
+            }
+        ],
+        "Description": "Places X-Plane instrument popup windows at saved positions and sizes",
+        "EnabledByDefault": false,
+        "Icon": "preferences-system-windows-script-test",
+        "Id": "xplane-popup-manager",
+        "License": "BSD-2-Clause",
+        "Name": "X-Plane Popup Manager",
+        "Version": "1.0"
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}
