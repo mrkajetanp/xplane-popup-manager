@@ -11,7 +11,7 @@ interrupted, so it can be started before or after X-Plane.
 import time
 
 from common import (AIRCRAFT_NAME_DATAREF, AIRCRAFT_PATH_DATAREF, WebSocket, XPlaneAPI,
-                    decode_string, read_config, reload_script, write_config)
+                    decode_string, read_config, use_aircraft)
 
 # How often to try connecting while X-Plane isn't running.
 RECONNECT_SECONDS = 30
@@ -27,8 +27,7 @@ class Watcher:
 
     def aircraft_changed(self, api, path):
         self.current = path
-        write_config("Aircraft", path)
-        reloaded = reload_script()
+        reloaded = use_aircraft(path)
         name = api.read_string(AIRCRAFT_NAME_DATAREF)
         log(f"aircraft: {name} ({path}){'' if reloaded else ' [KWin script not loaded]'}")
 

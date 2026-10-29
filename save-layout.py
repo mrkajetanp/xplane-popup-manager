@@ -17,7 +17,7 @@ import json
 import re
 import sys
 
-from common import XPlaneAPI, read_layout, reload_script, run, write_config, write_layout
+from common import XPlaneAPI, read_layout, reload_script, run, use_aircraft, write_layout
 
 WINDOW_CLASS = "X-Plane"
 # The main simulator window ("X-Plane Personal Edition", etc.) is not a popup.
@@ -104,10 +104,8 @@ def main():
 
     layout["aircraft"] = {k: v for k, v in layout["aircraft"].items() if v}
     write_layout(layout)
-    if aircraft:
-        # Keep the KWin script in sync even if the watcher isn't running.
-        write_config("Aircraft", aircraft[0])
-    if not reload_script():
+    # Also keeps the KWin script on the right aircraft if the watcher isn't running.
+    if not (use_aircraft(aircraft[0]) if aircraft else reload_script()):
         print("note: KWin script is not loaded; layout saved but not applied")
 
 

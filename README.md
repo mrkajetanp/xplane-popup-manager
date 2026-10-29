@@ -23,6 +23,8 @@ at `127.0.0.1:8086`).
   so there is no polling: one dataref lookup and one connection per X-Plane
   session. While X-Plane isn't running it tries to connect every 30 s.
 - `save-layout.py` — saves the current popup positions.
+- `apply-layout.py` — one-off: detects the loaded aircraft and re-places all
+  open popups by its layout, including ones you moved by hand.
 
 ## Install / update
 
@@ -34,7 +36,9 @@ automatically; run it yourself while flying:
     ./watcher.py
 
 Without the watcher, the KWin script keeps using the layout of the last
-aircraft it was told about (also updated by every `save-layout.py` run).
+aircraft it was told about. Run `./apply-layout.py` after switching aircraft
+(or any time) to pick up the current one and place its popups; every
+`save-layout.py` run updates it too.
 
 ## Saving a layout
 

@@ -171,6 +171,13 @@ def write_layout(layout):
     write_config("Layout", json.dumps(layout, separators=(",", ":")))
 
 
+def use_aircraft(path):
+    """Point the KWin script at an aircraft's layout and reload it, which also
+    re-places all open popups. Returns False if the script isn't enabled."""
+    write_config("Aircraft", path)
+    return reload_script()
+
+
 def reload_script():
     """Reload the KWin script so it re-reads its config. Returns False if it
     isn't enabled."""
